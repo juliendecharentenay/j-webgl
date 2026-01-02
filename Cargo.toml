@@ -1,5 +1,5 @@
 [workspace]
 resolver = "3"
-members = [ "j-webgl-macro-make-render",
-  "j-webgl"
+members = [ "j-webgl-macro-make-renderer",
+  "j-webgl", "examples/wasm"
 ]

@@ -1,0 +1,12 @@
+[package]
+name = "wasm"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+j-webgl = { path = "../../j-webgl" }
+j-webgl-macro-make-renderer = { path = "../../j-webgl-macro-make-renderer" }
+wasm-bindgen = { version = "0" }

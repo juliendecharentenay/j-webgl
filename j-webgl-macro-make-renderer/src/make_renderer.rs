@@ -131,7 +131,7 @@ pub fn expand_macro(tokens: TokenStream) -> SynResult<TokenStream> {
     let struct_def = quote! {
         #[wasm_bindgen::prelude::wasm_bindgen]
         pub struct #struct_name {
-            inner: webgl_rs::Renderer,
+            inner: j_webgl::Renderer,
         }
     };
 
@@ -141,9 +141,9 @@ pub fn expand_macro(tokens: TokenStream) -> SynResult<TokenStream> {
     // new() method
     let new_method = quote! {
         #[wasm_bindgen(constructor)]
-        pub fn new(canvas: web_sys::HtmlCanvasElement) -> std::result::Result<#struct_name, wasm_bindgen::JsValue> {
+        pub fn new(canvas: j_webgl::exports::web_sys::HtmlCanvasElement) -> std::result::Result<#struct_name, wasm_bindgen::JsValue> {
             Ok(#struct_name {
-                inner: webgl_rs::Renderer::new(canvas)?,
+                inner: j_webgl::Renderer::new(canvas)?,
             })
         }
     };
