@@ -1,7 +1,10 @@
 [package]
 name = "j-webgl-macro-make-renderer"
-version = "0.1.0"
+version = "0.0.1"
 edition = "2024"
+description = "[internal] Wrapper around WebGL v2 to faciliate re-use."
+repository = "https://github.com/juliendecharentenay/j-webgl"
+license = "GPLv3"
 
 [lib]
 proc-macro = true
