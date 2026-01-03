@@ -4,7 +4,7 @@ version = "0.0.2"
 edition = "2024"
 description = "Wrapper around WebGL v2 to faciliate re-use"
 repository = "https://github.com/juliendecharentenay/j-webgl"
-license = "GPLv3"
+license = "GPL-3.0-only"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
