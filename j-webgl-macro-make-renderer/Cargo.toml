@@ -1,6 +1,6 @@
 [package]
 name = "j-webgl-macro-make-renderer"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2024"
 description = "[internal] Wrapper around WebGL v2 to faciliate re-use."
 repository = "https://github.com/juliendecharentenay/j-webgl"
