@@ -99,7 +99,7 @@ fn pascal_to_snake_case(s: &str) -> String {
         result.push(first.to_lowercase().next().unwrap_or(first));
     }
     
-    while let Some(ch) = chars.next() {
+    for ch in chars {
         if ch.is_uppercase() {
             result.push('_');
             result.push(ch.to_lowercase().next().unwrap_or(ch));
@@ -112,10 +112,9 @@ fn pascal_to_snake_case(s: &str) -> String {
 }
 
 fn get_last_segment_name(ty: &Type) -> Option<String> {
-    if let Type::Path(TypePath { path, .. }) = ty {
-        if let Some(segment) = path.segments.last() {
-            return Some(pascal_to_snake_case(&segment.ident.to_string()));
-        }
+    if let Type::Path(TypePath { path, .. }) = ty &&
+       let Some(segment) = path.segments.last() {
+      return Some(pascal_to_snake_case(&segment.ident.to_string()));
     }
     None
 }
@@ -158,7 +157,7 @@ pub fn expand_macro(tokens: TokenStream) -> SynResult<TokenStream> {
         
         let method = quote! {
             pub fn #method_name(mut self, id: String, renderable: #renderable_type) -> std::result::Result<Self, wasm_bindgen::JsValue> {
-                self.inner.with_renderable(id, Some(Box::new(renderable)))?;
+                self.inner.with_renderable(id, Some(renderable))?;
                 Ok(self)
             }
         };
@@ -166,13 +165,15 @@ pub fn expand_macro(tokens: TokenStream) -> SynResult<TokenStream> {
     }
 
     // without method to remove a renderables
-    let without_method = quote! {
+    if let Some(renderable_type) = renderable_types.get(0) {
+      let without_method = quote! {
         pub fn without(mut self, id: String) -> std::result::Result<Self, wasm_bindgen::JsValue> {
-            self.inner.with_renderable(id, None)?;
+            self.inner.with_renderable::<#renderable_type>(id, None)?;
             Ok(self)
         }
-    };
-    methods.push(without_method);
+      };
+      methods.push(without_method);
+    }
 
     // resize method to handle canvas resize
     let resize_method = quote! {

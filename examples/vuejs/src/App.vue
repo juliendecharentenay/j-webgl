@@ -28,25 +28,19 @@ import("./pkg")
   const canvas = document.querySelector("canvas");
   let renderer = new wasm.MyRenderer(canvas);
 
-  { // const i_ = wasm.Initializer.default();
-    const i = wasm.Initializer.default();
+  { const i = wasm.Initializer.new();
     renderer = renderer.with_initializer("background", i);
   }
-  { // const i_ = wasm.Initializer.default();
-    const i = wasm.CubeWithNormals.new();
+  { const i = wasm.CubeWithNormals.new();
     renderer = renderer.with_cube_with_normals("cube", i);
   }
   /*
-  { // const i_ = wasm.Initializer.default();
-    const i = wasm.Cube.new();
+  { const i = wasm.Cube.new();
     renderer = renderer.with_cube("cube", i);
   }
-  { // const i_ = wasm.Initializer.default();
-    renderer = renderer.without("cube");
+  { renderer = renderer.without("cube");
   }
   */
-
-
 
   camera_.value = new wasm.Basic(canvas.clientWidth, canvas.clientHeight);
   renderer.render(camera_.value);
@@ -70,7 +64,8 @@ const render = () => {
 window.addEventListener('resize', () => {
   catcher("resize", () => {
     if (renderer_.value !== null && camera_.value !== null) {
-      renderer_.value.resize_and_render(camera_.value);
+      console.log("resize");
+      renderer_.value.resize(); render();
     }
   });
 });

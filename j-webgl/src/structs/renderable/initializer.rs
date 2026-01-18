@@ -6,13 +6,13 @@ pub struct Initializer {}
 
 #[wasm_bindgen::prelude::wasm_bindgen]
 impl Initializer {
-  pub fn default() -> Self { Initializer {} }
+  pub fn new() -> Result<Self> { Ok(Initializer {}) }
 }
 
 impl traits::Renderable for Initializer {
   fn render(&self,
     context: &web_sys::WebGl2RenderingContext,
-    _camera: &[f32],
+    _camera_mvp: &[f32],
   ) -> Result<()>
   {
     // Clear the canvas

@@ -1,17 +1,17 @@
 use super::{Point3, Vector3};
 use std::ops::Mul;
 
-pub struct Mat4 {
+pub struct Matrix4 {
     elements: [f32; 16],
 }
 
-impl std::convert::From<[f32; 16]> for Mat4 {
+impl std::convert::From<[f32; 16]> for Matrix4 {
   fn from(elements: [f32; 16]) -> Self {
-    Mat4 { elements }
+    Matrix4 { elements }
   }
 }
 
-impl Mat4 {
+impl Matrix4 {
     pub fn new_perspective(aspect: f32, field_of_view_in_radians: f32, near: f32, far: f32) -> Self {
       // let f = (std::f32::consts::PI * 0.5 - 0.5 * field_of_view_in_radians).tan();
       let f = 1.0 / (0.5 * field_of_view_in_radians).tan();
@@ -35,11 +35,11 @@ impl Mat4 {
       ].into()
     }
 
-    pub fn multiply(&self, other: &Mat4) -> Mat4 {
+    pub fn multiply(&self, other: &Matrix4) -> Matrix4 {
       multiply(&self.elements, &other.elements).into()
     }
   
-    pub fn new_translation(tx: f32, ty: f32, tz: f32) -> Mat4 {
+    pub fn new_translation(tx: f32, ty: f32, tz: f32) -> Matrix4 {
       [  1.0,  0.0,  0.0,  0.0,
          0.0,  1.0,  0.0,  0.0,
          0.0,  0.0,  1.0,  0.0,
@@ -47,7 +47,7 @@ impl Mat4 {
       ].into()
     }
 
-    pub fn look_at_rh(camera_position: &Point3, target: &Point3, up: &Vector3) -> Mat4 {
+    pub fn look_at_rh(camera_position: &Point3, target: &Point3, up: &Vector3) -> Matrix4 {
       let z_axis = (camera_position - target).normalize();
       let x_axis = up.cross(&z_axis).normalize();
       let y_axis = z_axis.cross(&x_axis).normalize();
@@ -132,44 +132,44 @@ impl Mat4 {
     */
 }
 
-impl Mul<&Mat4> for &Mat4 {
-  type Output = Mat4;
-  fn mul(self, other: &Mat4) -> Mat4 {
+impl Mul<&Matrix4> for &Matrix4 {
+  type Output = Matrix4;
+  fn mul(self, other: &Matrix4) -> Matrix4 {
     self.multiply(other)
   }
 }
 
 
 fn multiply(a: &[f32; 16], b: &[f32; 16]) -> [f32; 16] {
-      let a00 = a[0 * 4 + 0];
-      let a01 = a[0 * 4 + 1];
-      let a02 = a[0 * 4 + 2];
-      let a03 = a[0 * 4 + 3];
-      let a10 = a[1 * 4 + 0];
-      let a11 = a[1 * 4 + 1];
-      let a12 = a[1 * 4 + 2];
-      let a13 = a[1 * 4 + 3];
-      let a20 = a[2 * 4 + 0];
+      let a00 = a[        0];
+      let a01 = a[        1];
+      let a02 = a[        2];
+      let a03 = a[        3];
+      let a10 = a[    4    ];
+      let a11 = a[    4 + 1];
+      let a12 = a[    4 + 2];
+      let a13 = a[    4 + 3];
+      let a20 = a[2 * 4    ];
       let a21 = a[2 * 4 + 1];
       let a22 = a[2 * 4 + 2];
       let a23 = a[2 * 4 + 3];
-      let a30 = a[3 * 4 + 0];
+      let a30 = a[3 * 4    ];
       let a31 = a[3 * 4 + 1];
       let a32 = a[3 * 4 + 2];
       let a33 = a[3 * 4 + 3];
-      let b00 = b[0 * 4 + 0];
-      let b01 = b[0 * 4 + 1];
-      let b02 = b[0 * 4 + 2];
-      let b03 = b[0 * 4 + 3];
-      let b10 = b[1 * 4 + 0];
-      let b11 = b[1 * 4 + 1];
-      let b12 = b[1 * 4 + 2];
-      let b13 = b[1 * 4 + 3];
-      let b20 = b[2 * 4 + 0];
+      let b00 = b[        0];
+      let b01 = b[        1];
+      let b02 = b[        2];
+      let b03 = b[        3];
+      let b10 = b[    4    ];
+      let b11 = b[    4 + 1];
+      let b12 = b[    4 + 2];
+      let b13 = b[    4 + 3];
+      let b20 = b[2 * 4    ];
       let b21 = b[2 * 4 + 1];
       let b22 = b[2 * 4 + 2];
       let b23 = b[2 * 4 + 3];
-      let b30 = b[3 * 4 + 0];
+      let b30 = b[3 * 4    ];
       let b31 = b[3 * 4 + 1];
       let b32 = b[3 * 4 + 2];
       let b33 = b[3 * 4 + 3];
@@ -194,19 +194,19 @@ fn multiply(a: &[f32; 16], b: &[f32; 16]) -> [f32; 16] {
 }
 
 fn inverse(m: &[f32; 16]) -> [f32; 16] {
-      let m00 = m[0 * 4 + 0];
-      let m01 = m[0 * 4 + 1];
-      let m02 = m[0 * 4 + 2];
-      let m03 = m[0 * 4 + 3];
-      let m10 = m[1 * 4 + 0];
-      let m11 = m[1 * 4 + 1];
-      let m12 = m[1 * 4 + 2];
-      let m13 = m[1 * 4 + 3];
-      let m20 = m[2 * 4 + 0];
+      let m00 = m[        0];
+      let m01 = m[        1];
+      let m02 = m[        2];
+      let m03 = m[        3];
+      let m10 = m[    4    ];
+      let m11 = m[    4 + 1];
+      let m12 = m[    4 + 2];
+      let m13 = m[    4 + 3];
+      let m20 = m[2 * 4    ];
       let m21 = m[2 * 4 + 1];
       let m22 = m[2 * 4 + 2];
       let m23 = m[2 * 4 + 3];
-      let m30 = m[3 * 4 + 0];
+      let m30 = m[3 * 4    ];
       let m31 = m[3 * 4 + 1];
       let m32 = m[3 * 4 + 2];
       let m33 = m[3 * 4 + 3];

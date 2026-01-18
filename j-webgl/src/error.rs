@@ -8,8 +8,12 @@ pub enum Error {
     SerdeWasmBindgenError(#[from] serde_wasm_bindgen::Error),
     */
 
+    #[error(transparent)]
+    TryFromIntError(#[from] std::num::TryFromIntError),
     #[error("Unsupported operation: {0}")]
     UnsupportedOperation(String),
+    #[error("{0}")]
+    Misc(String),
 }
 
 impl From<wasm_bindgen::JsValue> for Error {
@@ -21,6 +25,12 @@ impl From<wasm_bindgen::JsValue> for Error {
 impl From<Error> for wasm_bindgen::JsValue {
     fn from(error: Error) -> Self {
         wasm_bindgen::JsValue::from_str(&error.to_string())
+    }
+}
+
+impl From<&str> for Error {
+    fn from(error: &str) -> Self {
+      Error::Misc(error.to_string())
     }
 }
 

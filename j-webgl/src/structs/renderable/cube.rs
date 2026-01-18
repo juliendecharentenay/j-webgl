@@ -23,7 +23,7 @@ impl traits::Renderable for Cube {
   fn render(
     &self,
     context: &web_sys::WebGl2RenderingContext,
-    camera: &[f32],
+    camera_mvp: &[f32],
   ) -> Result<()>
   {
     if self.inner.borrow().is_none() {
@@ -39,9 +39,9 @@ impl traits::Renderable for Cube {
           .get_uniform_location(&program, "u_matrix");
       let color_location = context.get_uniform_location(&program, "u_color");
 
-      let position_buffer = context.create_buffer().unwrap();
+      let position_buffer = context.create_buffer().ok_or("Unable to create buffer")?;
 
-      let vao = context.create_vertex_array().unwrap();
+      let vao = context.create_vertex_array().ok_or("Unable to create vertex array")?;
       context.bind_vertex_array(Some(&vao));
 
       context.enable_vertex_attrib_array(position_attribute_location as u32);
@@ -125,7 +125,7 @@ impl traits::Renderable for Cube {
     context.uniform_matrix4fv_with_f32_array(
       Some(&inner.matrix_location),
       false,
-      camera,
+      camera_mvp,
     );
     context.draw_arrays(
           web_sys::WebGl2RenderingContext::TRIANGLES,

@@ -20,3 +20,4 @@ web-sys = { version = "0.3.83", features = [
     "WebGlVertexArrayObject",
     "Window", "DomRect", "Element", "console",
 ] }
+j-webgl-macro-make-renderer = { path = "../j-webgl-macro-make-renderer" }
